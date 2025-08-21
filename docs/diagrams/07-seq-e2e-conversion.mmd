@@ -1,0 +1,20 @@
+%% Sequence: E2E conversion
+sequenceDiagram
+  participant U as User
+  participant FE as Web App
+  participant OR as Orchestrator
+  participant CI as Conversion Intelligence
+  participant AG as Agent Manager
+  participant QC as QC Service
+  participant PR as Provider
+  U->>FE: submit repo + target
+  FE->>OR: create deployment request
+  OR->>CI: analyze + convert (SGR+MCP)
+  CI-->>OR: converted config + artifacts
+  OR->>AG: plan + artifacts
+  AG->>PR: deploy
+  PR-->>AG: endpoint/status
+  AG->>QC: trigger gates
+  QC-->>AG: pass/fail with hints
+  AG-->>OR: result + logs
+  OR-->>FE: live URL + report

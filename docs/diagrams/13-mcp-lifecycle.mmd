@@ -1,0 +1,10 @@
+%% MCP lifecycle
+flowchart LR
+  start([Task Requirements])-->cap[Infer required capabilities]
+  cap-->discover[Discover MCPs\n(registries/APIs/community)]
+  discover-->select[Score & Select (quality/latency/limits)]
+  select-->connect[Establish Connections]
+  connect-->invoke[Invoke tools]
+  invoke-->audit[Self-validate + Delegate to validators]
+  audit-->cleanup[Disconnect unused MCPs]
+  cleanup-->end([Ready for next step])

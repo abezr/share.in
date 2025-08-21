@@ -1,0 +1,9 @@
+{
+  "name": "helios-seed",
+  "private": true,
+  "version": "0.1.0",
+  "scripts": {
+    "render:diagrams": "node scripts/render-diagrams.mjs",
+    "ext:pack": "cd apps/extension && mkdir -p ../dist && zip -r ../dist/helios-extension.zip ."
+  }
+}

@@ -1,0 +1,8 @@
+%% QC pipeline
+flowchart LR
+  start([Artifact & URL])-->lint[IaC/Code Lint (Semgrep)]
+  lint-->vuln[Vulns & Misconfig (Trivy)]
+  vuln-->policy[Policy Eval (OPA/Rego)]
+  policy-->health[Post-Deploy Health Checks]
+  health--pass-->ok([Gate PASS])
+  health--fail-->feedback[[Agent Feedback via JetStream]]

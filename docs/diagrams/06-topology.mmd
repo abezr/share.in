@@ -1,0 +1,23 @@
+%% Deployment / Topology
+flowchart TB
+  subgraph BrowserEdge[User Browser / Edge]
+    spa[Helios SPA]
+    nano[On-device LLM (Gemini Nano)]
+    webgpu[WebGPU Validation]
+  end
+  subgraph HeliosCloud[Helios Cloud]
+    ctl[Helios Control Plane]
+    js[JetStream]
+    obs[OTel Collector]
+  end
+  subgraph Exec[Execution Zones]
+    gvisor[gVisor Sandboxes]
+    microvm[Firecracker microVMs]
+  end
+  spa--HTTPS-->ctl
+  ctl<-->js
+  ctl<-->obs
+  ctl-->gvisor-->Providers
+  ctl-->microvm-->Providers
+  nano-. local prompts .->spa
+  webgpu-. client checks .->spa

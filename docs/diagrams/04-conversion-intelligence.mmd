@@ -1,0 +1,18 @@
+%% C3b: Conversion Intelligence (SGR + MCP)
+flowchart LR
+  srccfg[Source Config]
+  sgre[SGR Engine\n(JSON Schema + Grammars)]
+  kg[Infra Knowledge Graph]
+  schemas[Schema Registry]
+  mcpreg[MCP Server Registry]
+  mcps[(Provider/Validator/Optimizer MCPs)]
+  selfval[Self-Validation]
+  peervalid[Peer Validation Network]
+  artifacts[Converted Config + Scripts + Docs]
+  srccfg-->sgre
+  schemas-->sgre
+  kg-->sgre
+  mcpreg---mcps
+  sgre-->artifacts
+  artifacts-->selfval-->peervalid
+  peervalid-->artifacts

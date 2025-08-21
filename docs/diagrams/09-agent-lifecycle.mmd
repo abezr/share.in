@@ -1,0 +1,14 @@
+%% Agent Lifecycle
+stateDiagram-v2
+  [*] --> Idle
+  Idle --> Planning
+  Planning --> Executing
+  Executing --> Checkpointing
+  Checkpointing --> Executing
+  Executing --> WaitingForQC
+  WaitingForQC --> Executing: fix issues
+  WaitingForQC --> Succeeded
+  Executing --> Paused: quota/external event
+  Paused --> Resumed
+  Resumed --> Executing
+  Executing --> Failed

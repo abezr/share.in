@@ -1,0 +1,11 @@
+%% ERD
+erDiagram
+  USER ||--o{ ACCOUNT : "owns"
+  ACCOUNT ||--o{ CREDENTIAL : "stores in Vault"
+  ACCOUNT ||--o{ DEPLOYMENT : "has"
+  DEPLOYMENT ||--o{ CHECKPOINT : "emits"
+  DEPLOYMENT ||--o{ QC_RESULT : "validated by"
+  DEPLOYMENT ||--o{ PLAN_STEP : "executes"
+  PLAN_STEP ||--o{ LOG : "writes"
+  COMMUNITY_POOL ||--o{ RESOURCE_SHARE : "offers"
+  RESOURCE_SHARE }o--|| ACCOUNT : "from"

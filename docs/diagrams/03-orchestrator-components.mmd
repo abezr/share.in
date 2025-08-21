@@ -1,0 +1,16 @@
+%% C3: Orchestrator Components
+flowchart LR
+  api[API Handler]
+  analyzer[Workload Analyzer]
+  strat[Provider Strategy Engine]
+  planner[Deployment Planner]
+  migr[Migration Coordinator]
+  prompts[AI Prompt Generator]
+  state[State Manager]
+  api-->analyzer-->strat
+  strat-->planner-->prompts
+  strat-->migr
+  planner-->agents[(Agent Mgmt)]
+  migr-->agents
+  strat-->monitor[(Quota Monitor)]
+  state<-->db[(DB)]

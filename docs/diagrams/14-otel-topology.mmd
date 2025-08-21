@@ -1,0 +1,18 @@
+%% Observability (OTel)
+flowchart TB
+  subgraph Services
+    orch[Orchestrator]
+    agents[Agents]
+    qc[QC Service]
+    monitor[Quota Monitor]
+  end
+  subgraph OTel[OTel Pipeline]
+    sdk[OTel SDK (traces/metrics/logs)]
+    col[Collector (batch/filter/export)]
+  end
+  backends[(Grafana/Datadog/CloudWatch/etc.)]
+  orch--SDK-->sdk
+  agents--SDK-->sdk
+  qc--SDK-->sdk
+  monitor--SDK-->sdk
+  sdk-->col-->backends

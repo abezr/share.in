@@ -1,0 +1,1 @@
+-- flyway/liquibase: create initial tables here

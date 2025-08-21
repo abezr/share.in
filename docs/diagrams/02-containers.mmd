@@ -1,0 +1,35 @@
+%% C2: Containers
+flowchart TB
+  subgraph Helios["Helios Platform"]
+    fe[Web App (SPA)]
+    apigw[API Gateway]
+    orch[Orchestration Service]
+    agents[Agent Mgmt Service]
+    monitor[Resource & Quota Monitor]
+    qc[QC & Feedback Service]
+    commpool[Community Pool Service]
+    vault[Credential Vault]
+    db[(PostgreSQL)]
+    obj[(Checkpoint & Log Store)]
+    bus[(Event Bus: NATS JetStream)]
+    obs[Observability: OpenTelemetry Collector]
+  end
+  fe-->apigw
+  apigw-->orch
+  apigw-->agents
+  apigw-->commpool
+  orch-->monitor
+  orch-->db
+  orch-->agents
+  orch-->vault
+  orch-->bus
+  agents-->obj
+  agents-->bus
+  qc-->bus
+  qc-->cloud[Health/API checks]
+  monitor-->cloud
+  commpool-->community[libp2p/WebRTC]
+  obs---orch
+  obs---agents
+  obs---qc
+  obs---monitor

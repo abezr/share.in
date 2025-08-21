@@ -1,0 +1,7 @@
+%% Supply-chain (SLSA + Sigstore)
+flowchart LR
+  src[Source Repo]-->build[Reproducible Build\n(SLSA provenance)]
+  build-->sign[cosign sign (keyless)]
+  sign-->registry[OCI Registry]
+  registry-->verify[cosign verify + policy]
+  verify-->deploy[Deploy]

@@ -1,0 +1,11 @@
+%% Community P2P
+flowchart TB
+  match[Central Matchmaker\n(directory + consent + quotas)]
+  req[Consumer Task]
+  prov[Provider Resource]
+  p2p[Direct P2P Channel (WebRTC/libp2p)]
+  req--discover-->match
+  prov--advertise-->match
+  match--pairing creds-->req
+  match--pairing creds-->prov
+  req<--encrypted data-->p2p<-->prov

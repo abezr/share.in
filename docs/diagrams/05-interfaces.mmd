@@ -1,0 +1,24 @@
+%% C4 class diagram
+classDiagram
+  class IProviderAdapter {
+    +Quota getUsage(Creds)
+    +PreparationResult prepare(Plan, Creds)
+    +DeploymentResult deploy(Plan, Creds)
+    +ServiceStatus getStatus(id, Creds)
+    +void destroy(id, Creds)
+  }
+  class MCPClient {
+    +connect(serverInfo):Connection
+    +invoke(toolName, payload):Result
+    +disconnect():void
+  }
+  class SGREngine {
+    +ReasoningResult reasonWithSchema(source, target, conversionSchema)
+  }
+  class ValidationAgent {
+    +ValidationReport validate(convResult, source, target)
+  }
+  IProviderAdapter <|.. VercelAdapter
+  IProviderAdapter <|.. CloudflareWorkersAdapter
+  SGREngine --> MCPClient
+  ValidationAgent --> MCPClient

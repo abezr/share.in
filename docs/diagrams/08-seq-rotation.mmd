@@ -1,0 +1,11 @@
+%% Sequence: rotation on quota
+sequenceDiagram
+  participant MON as Quota Monitor
+  participant AG1 as Agent A (Provider X)
+  participant STORE as Checkpoint Store
+  participant AG2 as Agent B (Provider Y)
+  MON-->>AG1: quota at 95% (event)
+  AG1->>STORE: persist checkpoint + logs
+  AG2->>STORE: load checkpoint
+  AG2->>ProviderY: continue plan
+  AG2-->>MON: new allocation in use
