@@ -1,0 +1,12 @@
+rules:
+  - id: generic-secrets
+    languages: [generic]
+    message: Potential secret detected
+    pattern-regex: '(?i)(api[_-]?key|secret|token|password)\s*[:=]\s*[^\s]+'
+    severity: WARNING
+  - id: node-insecure-http
+    languages: [javascript, typescript]
+    message: Insecure HTTP usage detected
+    patterns:
+      - pattern: fetch('http://...', ...)
+    severity: INFO

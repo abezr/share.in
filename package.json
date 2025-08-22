@@ -18,9 +18,11 @@
     "package:starter": "node scripts/package-starter.mjs"
   },
   "lint-staged": {
-    "*.{js,json,md,mjs,css}": [
-      "prettier -w",
+    "*.{js,mjs}": [
       "eslint --fix"
+    ],
+    "*.{json,md,css}": [
+      "prettier -w"
     ]
   },
   "devDependencies": {
