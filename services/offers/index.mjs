@@ -1,4 +1,6 @@
 import http from 'node:http';
+import { fileURLToPath } from 'node:url';
+import { normalize } from 'node:path';
 
 const offers = [];
 const optOut = new Set();
@@ -44,6 +46,16 @@ export function start(port = 8081) {
   return server;
 }
 
-if (process.argv[1] === new URL(import.meta.url).pathname) {
+const isMain = (() => {
+  try {
+    const thisFile = normalize(fileURLToPath(import.meta.url));
+    const entry = process.argv[1] ? normalize(process.argv[1]) : '';
+    return thisFile === entry;
+  } catch {
+    return false;
+  }
+})();
+
+if (isMain) {
   start(process.env.PORT ? Number(process.env.PORT) : 8081);
 }
