@@ -15,7 +15,8 @@
     "format": "prettier -w .",
     "prepare": "husky",
     "ext:pack": "cd apps/extension && mkdir -p ../dist && zip -r ../dist/helios-extension.zip .",
-    "package:starter": "node scripts/package-starter.mjs"
+    "package:starter": "node scripts/package-starter.mjs",
+    "dev": "node scripts/dev.mjs"
   },
   "lint-staged": {
     "*.{js,mjs}": [
