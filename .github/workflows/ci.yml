@@ -13,10 +13,42 @@ jobs:
         with:
           node-version: 20
       - run: npm i
+      - run: npm test --workspaces=false
       - run: npm run render:diagrams
+      - run: node scripts/package-starter.mjs
       - uses: actions/upload-artifact@v4
         with:
           name: diagrams
           path: |
             docs/diagrams/svg
             docs/diagrams/png
+      - uses: actions/upload-artifact@v4
+        with:
+          name: helios-starter
+          path: dist/helios-starter.zip
+  db-validate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Validate Flyway migrations (skips if DB_URL unset)
+        run: |
+          chmod +x scripts/flyway-validate.sh
+          ./scripts/flyway-validate.sh
+  sast-semgrep:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: returntocorp/semgrep-action@v1
+        with:
+          config: ".semgrep.yaml"
+  sca-trivy:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Run Trivy FS scan
+        uses: aquasecurity/trivy-action@0.24.0
+        with:
+          scan-type: fs
+          ignore-unfixed: true
+          format: table
+          severity: CRITICAL,HIGH

@@ -1,14 +1,14 @@
 %% C1: System Context
 flowchart TB
-  user[(Platform User)]
-  vendor[(Vendor/Advertiser)]
-  subgraph Ext[External Systems]
-    cloud[Cloud/Hosting/DB/AI Providers]
-    genai[GenAI APIs (OpenAI/Gemini/Claude)]
-    repo[Source Repos (GitHub/GitLab)]
-    community[Community Peers (libp2p/WebRTC)]
+  user(["Platform User"])
+  vendor(["Vendor/Advertiser"])
+  subgraph Ext["External Systems"]
+    cloud["Cloud/Hosting/DB/AI Providers"]
+    genai["GenAI APIs (OpenAI/Gemini/Claude)"]
+    repo["Source Repos (GitHub/GitLab)"]
+    community["Community Peers (libp2p/WebRTC)"]
   end
-  helios[[Helios Platform]]
+  helios(["Helios Platform"])
   user --- helios
   vendor --- helios
   helios --- cloud

@@ -1,18 +1,18 @@
 %% C2: Containers
 flowchart TB
   subgraph Helios["Helios Platform"]
-    fe[Web App (SPA)]
-    apigw[API Gateway]
-    orch[Orchestration Service]
-    agents[Agent Mgmt Service]
-    monitor[Resource & Quota Monitor]
-    qc[QC & Feedback Service]
-    commpool[Community Pool Service]
-    vault[Credential Vault]
-    db[(PostgreSQL)]
-    obj[(Checkpoint & Log Store)]
-    bus[(Event Bus: NATS JetStream)]
-    obs[Observability: OpenTelemetry Collector]
+    fe["Web App (SPA)"]
+    apigw["API Gateway"]
+    orch["Orchestration Service"]
+    agents["Agent Mgmt Service"]
+    monitor["Resource & Quota Monitor"]
+    qc["QC & Feedback Service"]
+    commpool["Community Pool Service"]
+    vault["Credential Vault"]
+    db["PostgreSQL"]
+    obj["Checkpoint & Log Store"]
+    bus["Event Bus: NATS JetStream"]
+    obs["Observability: OpenTelemetry Collector"]
   end
   fe-->apigw
   apigw-->orch
