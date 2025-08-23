@@ -1,11 +1,220 @@
 <!doctype html>
-<html>
+<html lang="en">
   <head>
     <meta charset="utf-8" />
-    <title>P2P Demo</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>P2P Task Handoff Demo - Helios</title>
+    <link rel="stylesheet" href="css/demo.css" />
   </head>
   <body>
-    <h1>P2P Task Handoff Demo (placeholder)</h1>
-    <p>Implement WebRTC + libp2p in future tasks.</p>
+    <!-- Status Bar -->
+    <div class="status-bar" id="statusBar">
+      <div class="status-content">
+        <span class="status-indicator" id="statusIndicator"></span>
+        <span class="status-text" id="statusText">Disconnected</span>
+        <div class="status-stats">
+          <span id="peerCount">0</span> peers
+          <span class="separator">•</span>
+          <span id="quotaStatus">Quota: --</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="container">
+      <!-- Header -->
+      <header class="demo-header">
+        <h1>P2P Task Handoff Demo</h1>
+        <p class="subtitle">Real-time peer-to-peer AI prompt delegation using WebRTC</p>
+      </header>
+
+      <!-- Connection Panel -->
+      <section class="panel connection-panel">
+        <h2>Connection</h2>
+        <div class="connection-controls">
+          <div class="input-group">
+            <label for="signalingUrl">Signaling Server:</label>
+            <input type="text" id="signalingUrl" value="ws://localhost:8083/signaling" placeholder="WebSocket URL" />
+          </div>
+          <button id="connectBtn" class="btn btn-primary">Connect</button>
+          <button id="disconnectBtn" class="btn btn-secondary" disabled>Disconnect</button>
+        </div>
+        <div class="connection-info" id="connectionInfo">
+          <div class="info-item">
+            <label>Peer ID:</label>
+            <span id="peerIdDisplay">Not assigned</span>
+          </div>
+          <div class="info-item">
+            <label>Connection State:</label>
+            <span id="connectionState">disconnected</span>
+          </div>
+        </div>
+      </section>
+
+      <!-- Capabilities Panel -->
+      <section class="panel capabilities-panel">
+        <h2>Local Capabilities</h2>
+        <div class="capabilities-form">
+          <div class="checkbox-group">
+            <label><input type="checkbox" id="hasAI" checked> AI Processing Available</label>
+            <label><input type="checkbox" id="hasGPU"> GPU Acceleration</label>
+            <label><input type="checkbox" id="hasStorage"> Storage Available</label>
+          </div>
+          <div class="input-group">
+            <label for="quotaTotal">Total Quota:</label>
+            <input type="number" id="quotaTotal" value="1000" min="0" />
+          </div>
+          <div class="input-group">
+            <label for="quotaUsed">Used Quota:</label>
+            <input type="number" id="quotaUsed" value="0" min="0" readonly />
+          </div>
+          <button id="announceCapabilitiesBtn" class="btn btn-primary" disabled>Announce Capabilities</button>
+        </div>
+      </section>
+
+      <!-- Peers Panel -->
+      <section class="panel peers-panel">
+        <h2>Available Peers</h2>
+        <div class="peers-controls">
+          <button id="discoverPeersBtn" class="btn btn-secondary" disabled>Discover Peers</button>
+          <button id="refreshPeersBtn" class="btn btn-secondary" disabled>Refresh</button>
+        </div>
+        <div class="peer-grid" id="peerGrid">
+          <div class="no-peers-message" id="noPeersMessage">
+            <p>No peers discovered yet. Connect to the signaling server and click "Discover Peers" to find available peers.</p>
+          </div>
+        </div>
+      </section>
+
+      <!-- Task Delegation Panel -->
+      <section class="panel delegation-panel">
+        <h2>Task Delegation</h2>
+        <div class="delegation-form">
+          <div class="input-group">
+            <label for="promptInput">Prompt:</label>
+            <textarea id="promptInput" placeholder="Enter your AI prompt here..." rows="4"></textarea>
+          </div>
+          <div class="delegation-controls">
+            <select id="executionMode">
+              <option value="auto">Auto (Smart Routing)</option>
+              <option value="local">Force Local</option>
+              <option value="delegate">Force Delegation</option>
+            </select>
+            <button id="executePromptBtn" class="btn btn-primary" disabled>Execute Prompt</button>
+          </div>
+        </div>
+        
+        <div class="execution-status" id="executionStatus" style="display: none;">
+          <div class="status-message" id="executionMessage"></div>
+          <div class="progress-bar" id="progressBar">
+            <div class="progress-fill" id="progressFill"></div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Response Panel -->
+      <section class="panel response-panel" id="responsePanel" style="display: none;">
+        <h2>Response</h2>
+        <div class="response-header">
+          <span class="response-source" id="responseSource"></span>
+          <span class="response-time" id="responseTime"></span>
+        </div>
+        <div class="response-content" id="responseContent"></div>
+        <div class="response-actions">
+          <button id="clearResponseBtn" class="btn btn-secondary">Clear</button>
+          <button id="copyResponseBtn" class="btn btn-secondary">Copy</button>
+        </div>
+      </section>
+
+      <!-- Monitoring Panel -->
+      <section class="panel monitoring-panel">
+        <h2>System Monitoring</h2>
+        <div class="monitoring-tabs">
+          <button class="tab-btn active" data-tab="quota">Quota</button>
+          <button class="tab-btn" data-tab="security">Security</button>
+          <button class="tab-btn" data-tab="performance">Performance</button>
+        </div>
+        
+        <!-- Quota Tab -->
+        <div class="tab-content active" id="quotaTab">
+          <div class="quota-overview">
+            <div class="quota-item">
+              <label>Local Usage:</label>
+              <div class="quota-bar">
+                <div class="quota-fill" id="localQuotaFill"></div>
+              </div>
+              <span class="quota-text" id="localQuotaText">0 / 1000</span>
+            </div>
+            <div class="rate-limits" id="rateLimits">
+              <div class="rate-limit-item">
+                <label>Requests/min:</label>
+                <span id="requestsPerMinute">0 / 60</span>
+              </div>
+              <div class="rate-limit-item">
+                <label>Concurrent:</label>
+                <span id="concurrentRequests">0 / 5</span>
+              </div>
+            </div>
+          </div>
+        </div>
+        
+        <!-- Security Tab -->
+        <div class="tab-content" id="securityTab">
+          <div class="security-overview">
+            <div class="security-stats">
+              <div class="stat-item">
+                <label>Blocked Peers:</label>
+                <span id="blockedPeersCount">0</span>
+              </div>
+              <div class="stat-item">
+                <label>Security Events:</label>
+                <span id="securityEventsCount">0</span>
+              </div>
+            </div>
+            <div class="trust-scores" id="trustScores"></div>
+          </div>
+        </div>
+        
+        <!-- Performance Tab -->
+        <div class="tab-content" id="performanceTab">
+          <div class="performance-metrics">
+            <div class="metric-item">
+              <label>Connection Latency:</label>
+              <span id="connectionLatency">-- ms</span>
+            </div>
+            <div class="metric-item">
+              <label>Success Rate:</label>
+              <span id="successRate">--%</span>
+            </div>
+            <div class="metric-item">
+              <label>Active Connections:</label>
+              <span id="activeConnections">0</span>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Logs Panel -->
+      <section class="panel logs-panel">
+        <h2>Activity Logs</h2>
+        <div class="logs-controls">
+          <button id="clearLogsBtn" class="btn btn-secondary">Clear Logs</button>
+          <label>
+            <input type="checkbox" id="autoScrollLogs" checked> Auto-scroll
+          </label>
+        </div>
+        <div class="logs-container" id="logsContainer">
+          <div class="log-entry info">
+            <span class="log-time">[System]</span>
+            <span class="log-message">P2P Task Handoff Demo initialized. Connect to signaling server to begin.</span>
+          </div>
+        </div>
+      </section>
+    </div>
+
+    <!-- Scripts -->
+    <script src="js/enhanced-p2p-manager.js"></script>
+    <script src="js/quota-monitor.js"></script>
+    <script src="js/security-manager.js"></script>
+    <script src="js/demo-app.js"></script>
   </body>
 </html>

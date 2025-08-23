@@ -48,6 +48,14 @@ async function startOffers() {
   start(port);
 }
 
+async function startSignalingServer() {
+  const { SignalingServer } = await import('../services/signaling/index.mjs');
+  const port = process.env.SIGNALING_PORT ? Number(process.env.SIGNALING_PORT) : 8083;
+  const server = new SignalingServer(port);
+  server.start();
+  return server;
+}
+
 function startDiagramsBuild() {
   run(process.execPath, ['scripts/render-diagrams.mjs']);
 }
@@ -60,9 +68,12 @@ function startP2PDemo() {
 (async function main() {
   console.log('[dev] starting local services...');
   await startOffers();
-  startDiagramsBuild();
+  await startSignalingServer();
+  //startDiagramsBuild();
   startP2PDemo();
   console.log('[dev] ready:');
   console.log('  - Offers service:        http://localhost:8081');
   console.log('  - P2P demo (static):     http://localhost:8082');
+  console.log('  - Signaling server:      ws://localhost:8083/signaling');
+  console.log('  - Health check:          http://localhost:8083/health');
 })();

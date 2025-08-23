@@ -1,0 +1,22 @@
+{
+  "name": "helios-signaling-server",
+  "version": "1.0.0",
+  "description": "WebSocket signaling server for P2P task handoff demo",
+  "type": "module",
+  "main": "index.mjs",
+  "scripts": {
+    "start": "node index.mjs",
+    "dev": "node --watch index.mjs"
+  },
+  "dependencies": {
+    "ws": "^8.17.1"
+  },
+  "keywords": [
+    "websocket",
+    "p2p",
+    "signaling",
+    "webrtc"
+  ],
+  "author": "Helios Team",
+  "license": "MIT"
+}
