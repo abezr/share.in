@@ -1,15 +1,6 @@
-import { spawn } from 'node:child_process';
 import http from 'node:http';
 import { createReadStream, statSync, existsSync } from 'node:fs';
 import { join, normalize, resolve } from 'node:path';
-
-function run(cmd, args = []) {
-  const child = spawn(cmd, args, { stdio: 'inherit', shell: false });
-  child.on('exit', code => {
-    console.log(`[dev] process ${cmd} ${args.join(' ')} exited with code ${code}`);
-  });
-  return child;
-}
 
 function serveDir(root, port) {
   const abs = resolve(root);
