@@ -469,7 +469,7 @@ class P2PDemo {
     try {
       await navigator.clipboard.writeText(this.elements.responseContent.textContent);
       this.log('Response copied to clipboard', 'success');
-    } catch (_error) {
+    } catch (error) {
       this.log('Failed to copy response', 'error');
     }
   }

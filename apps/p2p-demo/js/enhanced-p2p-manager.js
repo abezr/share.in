@@ -493,16 +493,16 @@ class EnhancedP2PManager {
    * @param {object} message - Data channel message
    * @param {string} _senderId - Sender peer ID
    */
-  handleDataChannelMessage(message, _senderId) {
+  handleDataChannelMessage(message, senderId) {
     switch (message.type) {
       case 'prompt-delegation':
-        this.handleIncomingPrompt(message, _senderId);
+        this.handleIncomingPrompt(message, senderId);
         break;
       case 'prompt-response':
-        this.handlePromptResponse(message, _senderId);
+        this.handlePromptResponse(message, senderId);
         break;
       case 'prompt-error':
-        this.handlePromptError(message, _senderId);
+        this.handlePromptError(message, senderId);
         break;
       default:
         console.warn(`[P2P] Unknown data channel message type: ${message.type}`);
@@ -664,7 +664,7 @@ class EnhancedP2PManager {
     console.log('[P2P] Disconnecting from all peers and signaling server');
     
     // Close all peer connections
-    for (const [peerId, pc] of this.connections.entries()) {
+    for (const [_peerId, pc] of this.connections.entries()) {
       pc.close();
     }
     

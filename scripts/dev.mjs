@@ -56,10 +56,6 @@ async function startSignalingServer() {
   return server;
 }
 
-function startDiagramsBuild() {
-  run(process.execPath, ['scripts/render-diagrams.mjs']);
-}
-
 function startP2PDemo() {
   const port = process.env.P2P_PORT ? Number(process.env.P2P_PORT) : 8082;
   serveDir('apps/p2p-demo', port);
